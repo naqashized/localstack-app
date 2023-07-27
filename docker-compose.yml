@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+
+  postgres:
+    image: "postgres:14.1-alpine"
+    container_name: "pgdb"
+    restart: "always"
+
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB= default_database
+
+    ports:
+      - 5432:5432
+
+  localstack:
+    image: "localstack/localstack:latest"
+    container_name: "localstack"
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=s3
+      - AWS_DEFAULT_REGION=eu-central-1
+      - AWS_ACCESS_KEY_ID=local
+      - USE_HTTP=true
+      - DEBUG=1
