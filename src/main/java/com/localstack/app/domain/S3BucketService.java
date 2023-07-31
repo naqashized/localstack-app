@@ -41,8 +41,8 @@ public class S3BucketService implements FileUploadService{
         File targetFile = new File("src/main/resources/targetFile.png");
 
         FileUtils.copyInputStreamToFile(base64InputStream(base64EncodedImage).get(), targetFile);
-                //new PutObjectRequest(s3Configuration.getBucketName(), randomName, base64InputStream(base64EncodedImage).get(), null);
-        PutObjectResponse response = s3Client.putObject(request, RequestBody.fromInputStream(base64InputStream(base64EncodedImage).get(), 20000));
+        InputStream inputStream = base64InputStream(base64EncodedImage).orElseThrow(() -> new IOException("Inputstream error"));
+        s3Client.putObject(request, RequestBody.fromInputStream(inputStream, inputStream.available()));
         var getUrlRequest = GetUrlRequest.builder().bucket(s3Configuration.getBucketName()).key(filePath).build();
         return s3Client.utilities().getUrl(getUrlRequest).toExternalForm();
     }
