@@ -37,7 +37,6 @@ public class S3BucketService implements FileUploadService{
         String filePath = S3_STORAGE +randomName+".png";
         PutObjectRequest request = PutObjectRequest.builder().bucket(s3Configuration.getBucketName()).key(filePath)
                 .build();
-        System.out.println("Randome key "+filePath);
         File targetFile = new File("src/main/resources/targetFile.png");
 
         FileUtils.copyInputStreamToFile(base64InputStream(base64EncodedImage).get(), targetFile);
