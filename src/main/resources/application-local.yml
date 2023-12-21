@@ -1,5 +1,15 @@
 aws:
   s3:
-    endpoint: "http://localhost:4566"
-    region: "eu-central-1"
-    bucketName: "cars-storage"
+    endpoint: http://localhost:4566
+    region: eu-central-1
+    bucketName: cars-storage
+
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5439/test
+    username: test
+    password: test
+    initialize: true
+  jpa:
+    hibernate:
+      ddl-auto : create

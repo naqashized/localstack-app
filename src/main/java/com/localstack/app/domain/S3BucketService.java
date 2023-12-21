@@ -9,7 +9,6 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -18,7 +17,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.localstack.app.api.config.AwsConfiguration.*;
+import static com.localstack.app.api.config.AwsConfiguration.S3Configuration;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class S3BucketService implements FileUploadService{
     private final S3Configuration s3Configuration;
 
     private static final String S3_STORAGE  = "cars/";
-    private static final String FILE_FORMAT = ".jpg";
+    private static final String FILE_FORMAT = ".png";
 
     @Autowired
     private final S3Client s3Client;
@@ -34,7 +33,7 @@ public class S3BucketService implements FileUploadService{
     @Override
     public String upload(String base64EncodedImage) throws IOException {
         String randomName = UUID.randomUUID().toString();
-        String filePath = S3_STORAGE +randomName+".png";
+        String filePath = S3_STORAGE +randomName+FILE_FORMAT;
         PutObjectRequest request = PutObjectRequest.builder().bucket(s3Configuration.getBucketName()).key(filePath)
                 .build();
         File targetFile = new File("src/main/resources/targetFile.png");
