@@ -19,7 +19,7 @@ This will run localstack container inside docker on port 4566. Docker shall alre
 2- Please setup AWS CLI on your machine first so you can create S3 bucket with below command;
 
 
-aws --endpoint-url=http://localhost:4566 s3 mb s3://cars-storage
+aws --endpoint-url=http://localhost:4566 s3 mb s3://cars-storage --region=eu-central-1
 
 
 This will create cars-storage bucket which I have setup in the app's local profile.
