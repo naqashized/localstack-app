@@ -11,3 +11,12 @@ services:
       - AWS_ACCESS_KEY_ID=local
       - USE_HTTP=true
       - DEBUG=1
+  postgres:
+    image: postgres:latest
+    container_name: localstack-app-pgsql
+    restart: always
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+    ports:
+      - 5439:5432
