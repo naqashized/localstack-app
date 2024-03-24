@@ -3,6 +3,8 @@ aws:
     endpoint: http://localhost:4566
     region: eu-central-1
     bucketName: cars-storage
+    accessKeyId: local
+    accessKeySecret: local
 
 spring:
   datasource:

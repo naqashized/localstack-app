@@ -31,47 +31,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
+import com.localstack.app.AbstractTestContainer;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-properties = {"spring.jpa.hibernate.ddl-auto:create"})
+        properties = {"spring.jpa.hibernate.ddl-auto:create"}
+)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Testcontainers
-public class CarControllerTests {
-    @Rule
-    public static LocalStackContainer localstack = new LocalStackContainer(DockerImageName.parse("localstack/localstack:latest"))
-            .withServices(S3);
-    @Container
-    @ServiceConnection
-    private static PostgreSQLContainer<?> postgresContainer = new  PostgreSQLContainer<>("postgres:latest");
+public class CarControllerTests extends AbstractTestContainer {
+
     @Autowired
     protected ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private CarService carService;
-    private static final String S3_BUCKET= "cars-bucket";
-
-
-    @DynamicPropertySource
-    private static void registerProperties(DynamicPropertyRegistry registry) {
-        var endpoint = getLocalstackEndpoint(localstack);
-        registry.add("aws.s3.endpoint", () -> endpoint);
-        registry.add("aws.s3.region", () -> localstack.getRegion());
-        registry.add("aws.s3.accessKeyId", () -> localstack.getAccessKey());
-        registry.add("aws.s3.secretAccessKey", () -> localstack.getSecretKey());
-        registry.add("aws.s3.bucketName", () -> S3_BUCKET);
-    }
-
-    private static URI getLocalstackEndpoint(LocalStackContainer localstack) {
-        return URI.create("http://" +  localstack.getHost() + ":" + localstack.getMappedPort(4566));
-    }
 
     @BeforeAll
     public static void start() throws IOException, InterruptedException {
         localstack.start();
-        localstack.execInContainer("awslocal", "s3", "mb", "s3://" + S3_BUCKET);
+        localstack.execInContainer("awslocal", "s3", "mb", "s3://" + AbstractTestContainer.S3_BUCKET);
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.localstack.app.api;
 
 
 import com.localstack.app.domain.CarService;
+import com.localstack.app.domain.NotificationService;
 import com.localstack.app.dto.CarDTO;
 import com.localstack.app.dto.NewCarRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarController {
     private final CarService carService;
+    private final NotificationService notificationService;
     @GetMapping
     public List<CarDTO> findCars(){
+        notificationService.send();
         return carService.findAll();
     }
 

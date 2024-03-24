@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.ses.SesClient;
 
 import java.net.URI;
 
@@ -31,6 +32,18 @@ public class AwsConfiguration {
         return s3Client;
     }
 
+    @Bean
+    public SesClient sesClient() {
+        return SesClient.builder()
+                .region(Region.of(s3Configuration.getRegion()))
+                .credentialsProvider(software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider.create())
+                .applyMutation(builder -> {
+                    builder.endpointOverride(URI.create(s3Configuration.getEndpoint()));
+                })
+                .build();
+    }
+
+
 
     @ConfigurationProperties("aws.s3")
     @Getter
@@ -39,6 +52,8 @@ public class AwsConfiguration {
         private String endpoint;
         private String region;
         private String bucketName;
+        private String accessKeyId;
+        private String accessKeySecret;
     }
 
 }
