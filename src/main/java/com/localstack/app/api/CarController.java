@@ -3,8 +3,6 @@ package com.localstack.app.api;
 
 import com.localstack.app.domain.CarService;
 import com.localstack.app.domain.NotificationService;
-import com.localstack.app.dto.CarDTO;
-import com.localstack.app.dto.NewCarRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +16,13 @@ public class CarController {
     private final CarService carService;
     private final NotificationService notificationService;
     @GetMapping
-    public List<CarDTO> findCars(){
+    public List<com.localstack.app.dto.CarDetails> findCars(){
         notificationService.send();
         return carService.findAll();
     }
 
     @PostMapping
-    public CarDTO save(@RequestBody NewCarRequest newCarRequest) throws IOException {
-        return carService.save(newCarRequest);
+    public com.localstack.app.dto.CarDetails save(@RequestBody com.localstack.app.dto.AddCar addCar) throws IOException {
+        return carService.save(addCar);
     }
 }

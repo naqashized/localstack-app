@@ -32,20 +32,31 @@ public class S3BucketService implements FileUploadService{
 
     @Override
     public String upload(String base64EncodedImage) throws IOException {
-        String randomName = UUID.randomUUID().toString();
-        String filePath = S3_STORAGE +randomName+FILE_FORMAT;
-        PutObjectRequest request = PutObjectRequest.builder().bucket(s3Configuration.getBucketName()).key(filePath)
+        var randomName = UUID.randomUUID().toString();
+        var filePath = S3_STORAGE +randomName+FILE_FORMAT;
+        var request = PutObjectRequest
+                .builder()
+                .bucket(s3Configuration.getBucketName())
+                .key(filePath)
                 .build();
-        File targetFile = new File("src/main/resources/targetFile.png");
+        var targetFile = new File("src/main/resources/targetFile.png");
 
         FileUtils.copyInputStreamToFile(base64InputStream(base64EncodedImage).get(), targetFile);
-        InputStream inputStream = base64InputStream(base64EncodedImage).orElseThrow(() -> new IOException("Inputstream error"));
+        var inputStream = base64InputStream(base64EncodedImage)
+                .orElseThrow(() -> new IOException("Inputstream error"));
         s3Client.putObject(request, RequestBody.fromInputStream(inputStream, inputStream.available()));
-        var getUrlRequest = GetUrlRequest.builder().bucket(s3Configuration.getBucketName()).key(filePath).build();
-        return s3Client.utilities().getUrl(getUrlRequest).toExternalForm();
+        var getUrlRequest = GetUrlRequest
+                .builder()
+                .bucket(s3Configuration.getBucketName())
+                .key(filePath)
+                .build();
+        return s3Client
+                .utilities()
+                .getUrl(getUrlRequest)
+                .toExternalForm();
     }
 
-    public Optional<InputStream> base64InputStream(String base64EncodedImage)throws IOException {
+    public Optional<InputStream> base64InputStream(String base64EncodedImage) {
         byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64EncodedImage);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
         return Optional.ofNullable(inputStream);

@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 		properties = {"spring.jpa.hibernate.ddl-auto:create"}
 )
-class AppApplicationTests extends AbstractTestContainer{
+class LocalstackAppTests extends AbstractTestContainer{
 	@Autowired
 	private CarController carController;
 	@Test

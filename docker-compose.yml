@@ -6,7 +6,7 @@ services:
     ports:
       - 4566:4566
     environment:
-      - SERVICES=s3,ses,sns
+      - SERVICES=s3,ses,sns,sqs
       - AWS_DEFAULT_REGION=eu-central-1
       - AWS_ACCESS_KEY_ID=local
       - USE_HTTP=true

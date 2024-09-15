@@ -2,8 +2,6 @@ package com.localstack.app.domain;
 
 import com.localstack.app.domain.models.Car;
 import com.localstack.app.domain.repositories.CarRepository;
-import com.localstack.app.dto.CarDTO;
-import com.localstack.app.dto.NewCarRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +14,16 @@ public class CarService {
     private final CarRepository carRepository;
     private final FileUploadService s3BucketService;
 
-    public CarDTO save(NewCarRequest newCarRequest) throws IOException {
-        var car = transformDto(newCarRequest);
+    public com.localstack.app.dto.CarDetails save(com.localstack.app.dto.AddCar addCar) throws IOException {
+        var car = transformDto(addCar);
         var newCar = carRepository.save(car);
-        return new CarDTO(newCar.getId(), newCar.getModel(), newCar.getSeries(), newCar.getImageUrl());
+        return new com.localstack.app.dto.CarDetails(newCar.getId(), newCar.getModel(), newCar.getSeries(), newCar.getImageUrl());
     }
 
-    public List<CarDTO> findAll(){
+    public List<com.localstack.app.dto.CarDetails> findAll(){
         return carRepository.findAll()
                 .stream()
-                .map(car -> new CarDTO(
+                .map(car -> new com.localstack.app.dto.CarDetails(
                         car.getId(),
                         car.getModel(),
                         car.getSeries(),
@@ -33,11 +31,11 @@ public class CarService {
                 ).toList();
     }
 
-    private Car transformDto(NewCarRequest newCarRequest) throws IOException {
+    private Car transformDto(com.localstack.app.dto.AddCar addCar) throws IOException {
         var car = new Car();
-        car.setSeries(newCarRequest.series());
-        car.setModel(newCarRequest.model());
-        car.setImageUrl(s3BucketService.upload(newCarRequest.image()));
+        car.setSeries(addCar.series());
+        car.setModel(addCar.model());
+        car.setImageUrl(s3BucketService.upload(addCar.image()));
         return car;
     }
 }

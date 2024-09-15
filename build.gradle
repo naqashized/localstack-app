@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'software.amazon.awssdk:s3:2.20.109'
 	implementation 'software.amazon.awssdk:ses:2.20.109'
+	implementation 'software.amazon.awssdk:sqs:2.20.109'
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
 	implementation 'commons-io:commons-io:2.6'
